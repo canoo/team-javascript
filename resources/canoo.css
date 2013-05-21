@@ -1,0 +1,24 @@
+body {
+    background: url("http://www.canoo.com/images/core/canoo_lines.png") no-repeat scroll center 42px white;
+}
+div#header {
+    margin-right: 10px;
+}
+div#static-service-html {
+    float: right;
+}
+#logo {
+    display: block;
+    height: 50px;
+    overflow: hidden;
+    padding: 31px 0 33px;
+    width: 347px;
+}
+#logo > a {
+    background: url("http://www.canoo.com/images/core/canoo_logo.png") no-repeat scroll left top transparent;
+    display: block;
+    height: 50px;
+    text-indent: -9999px;
+    width: 347px;
+}
+
