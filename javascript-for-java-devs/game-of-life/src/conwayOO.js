@@ -1,8 +1,8 @@
-// This is a very rough first draft of implementing a game of life in JavaScript and HTML5
+// This is an OO version of Game of Life
 
 function GameOfLife(initialState) {
 
-    this.board = []; // todo: make this private access somehow
+    this.board = [];
     var x, y, row, count;
 
     // game board arrives as a 2d array of booleans, convert to board structure
@@ -78,7 +78,7 @@ Cell.prototype.getNextState = function(neighbors) {
 
     var i, count = 0;
     for (i = 0; i < neighbors.length; i++) {
-        if (neighbors[i] != undefined && neighbors[i].state) {
+        if (neighbors[i] !== undefined && neighbors[i].state) {
             count = count + 1;
         }
     }

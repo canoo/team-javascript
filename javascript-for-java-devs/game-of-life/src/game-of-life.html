@@ -16,12 +16,11 @@
             var rnd = function () {
                 return !!Math.floor(Math.random() * 2);
             };
-            var x;
-            var result = [];
-            for (x = 0; x < count; x++) {
-                result[x] = Array.apply(null, new Array(count)).map(rnd);
-            }
-            return result;
+            return Array.apply(null, new Array(count)).map(
+                    function() {
+                        return Array.apply(null, new Array(count)).map(rnd);
+                    }
+            );
         };
 
         var createRenderer = function(onColor, offColor, canvasId, advanceGame) {
@@ -47,12 +46,18 @@
             };
         };
 
-
         var render1, render2, render3;
 
         var start1 = function() {
-            var game = createGameFI();
-            var gameV1 = function (board) { return game.advance(board); };
+            var game;
+            var gameV1 = function (board) {
+                if (!game) {
+                    game = createGameFI(board);
+                } else {
+                    game.advance();
+                }
+                return game.render();
+            };
             render1 = createRenderer("rgb(200,0,0)", "rgb(0,0,0)", 'canvas1', gameV1);
             render1();
         };

@@ -3,7 +3,7 @@ MyTestCase = TestCase("MyTestCase");
 MyTestCase.prototype.render = function (board) {
     return board.map(function (row) {
         return row.map(function(column) {
-            return column ? "*" : " ";
+            return column ? '*' : ' ';
         });
     });
 };
@@ -23,22 +23,29 @@ MyTestCase.prototype.testRender = function () {
 };
 
 MyTestCase.prototype.testRev1_1 = function () {
-    var game = createGameFI();
-    var board = [
+
+    var game = createGameFI([
         [true, false, true, false, true],
         [true, false, true, true, false],
         [false, false, true, false, true],
         [true, false, true, true, false]
-    ];
-    board = game.advance(board);
-    var table = this.render(board);
+    ]);
+
+    var table = this.render(game.render());
+    assertEquals("cell failed", ['*',  ' ', '*', ' ', '*' ], table[0]);
+    assertEquals("cell failed", ['*',  ' ', '*', '*', ' ' ], table[1]);
+    assertEquals("cell failed", [' ',  ' ', '*', ' ', '*' ], table[2]);
+    assertEquals("cell failed", ['*',  ' ', '*', '*', ' ' ], table[3]);
+
+    game.advance();
+    table = this.render(game.render());
     assertEquals("cell failed", [' ',  ' ', '*', ' ', ' ' ], table[0]);
     assertEquals("cell failed", [' ',  ' ', '*', ' ', '*' ], table[1]);
     assertEquals("cell failed", [' ',  ' ', ' ', ' ', '*' ], table[2]);
     assertEquals("cell failed", [' ',  '*', '*', '*', ' ' ], table[3]);
 
-    board = game.advance(board);
-    table = this.render(board);
+    game.advance();
+    table = this.render(game.render());
     assertEquals("cell failed", [' ', ' ', ' ', '*', ' ' ], table[0]);
     assertEquals("cell failed", [' ', ' ', ' ', ' ', ' ' ], table[1]);
     assertEquals("cell failed", [' ', '*', ' ', ' ', '*' ], table[2]);
@@ -46,15 +53,16 @@ MyTestCase.prototype.testRev1_1 = function () {
 };
 
 MyTestCase.prototype.testRev1_2 = function () {
-    var game = createGameFI();
-    var board = [
+
+    var game = createGameFI([
         [true,  false, false, true,  true],
         [true,  false, false, false, false],
         [false, false, false, false, false],
         [true,  false, false, false, true]
-    ];
-    board = game.advance(board);
-    table = this.render(board);
+    ]);
+
+    game.advance();
+    var table = this.render(game.render());
     assertEquals("cell failed", [' ', ' ', ' ', ' ', ' '], table[0]);
     assertEquals("cell failed", [' ', ' ', ' ', ' ', ' '], table[1]);
     assertEquals("cell failed", [' ', ' ', ' ', ' ', ' '], table[2]);

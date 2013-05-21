@@ -1,9 +1,9 @@
 
 // This is an implementation that follows Douglas Crawford's Function Inheritance Pattern
 
-var createGameFI = function() {
+var createGameFI = function(initialBoard) {
 
-    var that = {};
+    var gameBoard = initialBoard;
 
     function countNeighbors(board, x, y) {
         var count = 0;
@@ -36,17 +36,19 @@ var createGameFI = function() {
         }
     }
 
-    that.advance = function(board) {
-
-        return board.map(function(row, y) {
-            return row.map(function(cell, x) {
-                var count = countNeighbors(board, x, y);
-                return cellState(cell, count);
+    return {
+        render: function () {
+            return gameBoard;
+        },
+        advance: function () {
+            gameBoard = gameBoard.map(function (row, y) {
+                return row.map(function (cell, x) {
+                    var count = countNeighbors(gameBoard, x, y);
+                    return cellState(cell, count);
+                });
             });
-        });
+        }
     };
-
-    return that;
 };
 
 
