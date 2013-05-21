@@ -1,51 +1,82 @@
 <!DOCTYPE html>
 <html>
 <head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8">
+    <meta name="description" content="Canoo Engineering AG: Your first address for web front-end application development and language analysis">
+    <meta name="keywords" content="web applications,information retrieval,Rich Internet Applications,RIA,AJAX,java,Web security,ultra light client,web enabling,software development">
+    <title>Canoo - Delivering End-User Happiness - Game of Life Demo</title>
     <link href="../../../resources/bootstrap/css/bootstrap.min.css" rel="stylesheet" media="screen">
     <link href="../../../resources/canoo.css" rel="stylesheet">
     <script type="text/javascript" src="conway1.js" ></script>
+    <script type="text/javascript" src="conway00.js" ></script>
+    <script type="text/javascript" src="conwayFP.js" ></script>
     <script type="application/javascript">
 
-        const RED = "rgb(200,0,0)";
-        const BLACK = "rgb(0,0,0)";
-        const COUNT = 15;
-
-        var createBoard = function () {
+        var createRandomBoard = function (count) {
             var rnd = function () {
                 return !!Math.floor(Math.random() * 2);
             };
             var x;
             var result = [];
-            for (x = 0; x < COUNT; x++) {
-                result[x] = Array.apply(null, new Array(COUNT)).map(rnd);
+            for (x = 0; x < count; x++) {
+                result[x] = Array.apply(null, new Array(count)).map(rnd);
             }
             return result;
         };
-        var board = createBoard();
 
-        function render(board) {
-            var canvas = document.getElementById('canvas');
-            if (canvas.getContext) {
-                var rowCount = 0;
-                var ctx = canvas.getContext("2d");
-                board.forEach(function (row) {
-                    var columnCount = 0;
-                    rowCount += 1;
-                    row.forEach(function (column) {
-                        columnCount += 1;
-                        ctx.fillStyle = column ? RED : BLACK;
-                        ctx.fillRect((rowCount * 20), (columnCount * 20), 20, 20);
+        var createRenderer = function(onColor, offColor, canvasId, advanceGame) {
+            var board = createRandomBoard(15);
+
+            return function() {
+                board = advanceGame(board);
+                var canvas = document.getElementById(canvasId);
+                if (canvas.getContext) {
+                    var rowCount = 0;
+                    var ctx = canvas.getContext("2d");
+                    board.forEach(function (row) {
+                        var columnCount = 0;
+                        rowCount += 1;
+                        row.forEach(function (column) {
+                            columnCount += 1;
+                            ctx.fillStyle = column ? onColor : offColor;
+                            ctx.fillRect((rowCount * 20), (columnCount * 20), 20, 20);
+                        });
                     });
-                });
-            }
-        }
+                }
 
-        function advance() {
-            board = GameOfLife1.advance(board);
-        }
+            };
+        };
+
+
+        var render1, render2, render3;
+
+        var start1 = function() {
+            var gameV1 = function (board) { return GameOfLife1.advance(board); };
+            render1 = createRenderer("rgb(200,0,0)", "rgb(0,0,0)", 'canvas1', gameV1);
+            render1();
+        };
+        var start2 = function() {
+            var game = createGame();
+            var gameV2 = function (board) { return game(board); };
+            render2 = createRenderer("rgb(0,100,0)", "rgb(0,0,0)", 'canvas2', gameV2);
+            render2();
+        };
+        var start3 = function() {
+            var game;
+            var gameV3 = function (board) {
+                if (!game) {
+                    game = new GameOfLife(board);
+                }
+                game.advance();
+                return game.render();
+            };
+            render3 = createRenderer("rgb(0,0,205)", "rgb(0,0,0)", 'canvas3', gameV3);
+            render3 ();
+        };
+
     </script>
 </head>
-<body onload="render(board);">
+<body onload="start1(); start2(); start3();">
 
 <div id="header">
     <div id="static-service-html">
@@ -60,12 +91,35 @@
     </div>
 </div>
 
-<div>
-    <canvas id="canvas" width="350" height="350"></canvas></div>
-<div>
-    <input type="button" name="Reset" value="Reset" onclick="board = createBoard();render(board);">
-    <input type="button" name="Step" value="Step" onclick="advance();render(board);">
-    <input type="button" name="Play" value="Play" onclick="setInterval(function() {advance();render(board);}, 500); " >
-</div>
+    <div style="float: left">
+        <div>
+            <canvas id="canvas1" width="350" height="350"></canvas></div>
+        <div>
+            <input type="button" name="Reset" value="Reset" onclick="start1();">
+            <input type="button" name="Step" value="Step" onclick="render1();">
+            <input type="button" name="Play" value="Play" onclick="interval1 = setInterval(function() {render1();}, 500); " >
+            <input type="button" name="Stop" value="Stop" onclick="clearInterval(interval1); " >
+        </div>
+    </div>
+    <div style="float: left">
+        <div>
+            <canvas id="canvas2" width="350" height="350"></canvas></div>
+        <div>
+            <input type="button" name="Reset" value="Reset" onclick="start2();">
+            <input type="button" name="Step" value="Step" onclick="render2();">
+            <input type="button" name="Play" value="Play" onclick="interval2 = setInterval(function() {render2();}, 500); " >
+            <input type="button" name="Stop" value="Stop" onclick="clearInterval(interval2); " >
+        </div>
+    </div>
+    <div style="float: left">
+        <div>
+            <canvas id="canvas3" width="350" height="350"></canvas></div>
+        <div>
+            <input type="button" name="Reset" value="Reset" onclick="start3();">
+            <input type="button" name="Step" value="Step" onclick="render3();">
+            <input type="button" name="Play" value="Play" onclick="interval3 = setInterval(function() {render3();}, 500); " >
+            <input type="button" name="Stop" value="Stop" onclick="clearInterval(interval3); " >
+        </div>
+    </div>
 </body>
 </html>
