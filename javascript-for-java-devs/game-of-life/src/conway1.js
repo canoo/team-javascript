@@ -1,12 +1,6 @@
-var GameOfLife1 = {
+// This is a very rough first draft of implementing a game of life in JavaScript and HTML5
 
-    render : function (board) {
-        return board.map(function (row) {
-           return row.map(function(column) {
-                return column ? "*" : " ";
-            });
-        });
-    },
+var GameOfLife1 = {
 
     advance : function (board) {
 
@@ -27,6 +21,20 @@ var GameOfLife1 = {
             return count;
         }
 
+        // live cell with < 2 live neighbours dies
+        // live cell with > 3 live neighbours dies
+        // live cell with 2 or 3 live neighbours lives
+        // dead cell with exactly 3 live neighbours becomes alive
+        function cellState(cell, neighbors) {
+            if (neighbors < 2) {
+                return false;
+            } else if (cell) {
+                return neighbors <= 3;
+            } else { // must be dead cell
+                return neighbors === 3;
+            }
+        }
+
         var x, y, row, count;
         var newBoard = [];
 
@@ -35,18 +43,7 @@ var GameOfLife1 = {
             newBoard.push([]);
             for (x = 0; x < row.length; x++) {
                 count = countNeighbors(board, x, y);
-                if (count < 2) {
-                    // Any live cell with fewer than two live neighbours dies, as if caused by under-population.
-                    newBoard[y][x] = false;
-                } else if (board[y][x]) {
-                    // Any live cell with more than three live neighbours dies, as if by overcrowding.
-                    // Any live cell with two or three live neighbours lives on to the next generation.
-                    newBoard[y][x] = count <= 3;
-
-                } else { // must be dead cell
-                    // Any dead cell with exactly three live neighbours becomes a live cell, as if by reproduction.
-                    newBoard[y][x] = count === 3;
-                }
+                newBoard[y][x] = cellState(board[y][x], count);
             }
         }
         return newBoard;
