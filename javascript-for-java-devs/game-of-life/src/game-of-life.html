@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <script type="text/javascript" src="conway1.js" ></script>
+    <script type="application/javascript">
+
+        const RED = "rgb(200,0,0)";
+        const BLACK = "rgb(0,0,0)";
+        const COUNT = 15;
+
+        var createBoard = function () {
+            var rnd = function () {
+                return !!Math.floor(Math.random() * 2);
+            };
+            var x;
+            var result = [];
+            for (x = 0; x < COUNT; x++) {
+                result[x] = Array.apply(null, new Array(COUNT)).map(rnd);
+            }
+            return result;
+        };
+        var board = createBoard();
+
+        function render(board) {
+            var canvas = document.getElementById('canvas');
+            if (canvas.getContext) {
+                var rowCount = 0;
+                var ctx = canvas.getContext("2d");
+                board.forEach(function (row) {
+                    var columnCount = 0;
+                    rowCount += 1;
+                    row.forEach(function (column) {
+                        columnCount += 1;
+                        ctx.fillStyle = column ? RED : BLACK;
+                        ctx.fillRect((rowCount * 20), (columnCount * 20), 20, 20);
+                    });
+                });
+            }
+        }
+
+        function advance() {
+            board = GameOfLife1.advance(board);
+        }
+    </script>
+</head>
+<body onload="render(board);">
+<div>
+    <canvas id="canvas" width="350" height="350"></canvas></div>
+<div>
+    <input type="button" name="Reset" value="Reset" onclick="board = createBoard();render(board);">
+    <input type="button" name="Step" value="Step" onclick="advance();render(board);">
+    <input type="button" name="Play" value="Play" onclick="setInterval(function() {advance();render(board);}, 500); " >
+</div>
+</body>
+</html>
