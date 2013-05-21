@@ -1,0 +1,13 @@
+<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="trie-tests.js" type="JSTestDriver:ConfigurationType" factoryName="JsTestDriver">
+    <setting name="configLocationType" value="JS_FILE" />
+    <setting name="configType" value="FILE_PATH" />
+    <setting name="settingsFile" value="$PROJECT_DIR$/jsTestDriver.conf" />
+    <setting name="jsFile" value="$PROJECT_DIR$/src-test/trie-tests.js" />
+    <setting name="serverType" value="INTERNAL" />
+    <setting name="preferredDebugBrowser" value="CHROME" />
+    <RunnerSettings RunnerId="JsTestDriverClientRunner" />
+    <ConfigurationWrapper RunnerId="JsTestDriverClientRunner" />
+    <method />
+  </configuration>
+</component>
