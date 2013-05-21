@@ -1,22 +1,25 @@
 
-// An attempt at an Functional Programming version of the Game of Life
-var createGameFP = function() {
+// This is an implementation that follows Douglas Crawford's Function Inheritance Pattern
+
+var createGameFI = function() {
+
+    var that = {};
 
     function countNeighbors(board, x, y) {
-        var neighbors = [];
+        var count = 0;
         if (y > 0) {
-            neighbors.push(board[y - 1][x - 1]);
-            neighbors.push(board[y - 1][x]);
-            neighbors.push(board[y - 1][x + 1]);
+            count += board[y - 1][x - 1] ? 1 : 0;
+            count += board[y - 1][x] ? 1 : 0;
+            count += board[y - 1][x + 1] ? 1 : 0;
         }
-        neighbors.push(board[y][x - 1]);
-        neighbors.push(board[y][x + 1]);
+        count += board[y][x - 1] ? 1 : 0;
+        count += board[y][x + 1] ? 1 : 0;
         if (y < board.length - 1) {
-            neighbors.push(board[y + 1][x - 1]);
-            neighbors.push(board[y + 1][x]);
-            neighbors.push(board[y + 1][x + 1]);
+            count += board[y + 1][x - 1] ? 1 : 0;
+            count += board[y + 1][x] ? 1 : 0;
+            count += board[y + 1][x + 1] ? 1 : 0;
         }
-        return neighbors.reduce(function(prev, curr) { return prev + (curr ? 1 : 0); });
+        return count;
     }
 
     // live cell with < 2 live neighbours dies
@@ -33,7 +36,8 @@ var createGameFP = function() {
         }
     }
 
-    return function(board) {
+    that.advance = function(board) {
+
         return board.map(function(row, y) {
             return row.map(function(cell, x) {
                 var count = countNeighbors(board, x, y);
@@ -41,6 +45,8 @@ var createGameFP = function() {
             });
         });
     };
+
+    return that;
 };
 
 

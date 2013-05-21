@@ -23,20 +23,21 @@ MyTestCase.prototype.testRender = function () {
 };
 
 MyTestCase.prototype.testRev1_1 = function () {
+    var game = createGameFI();
     var board = [
         [true, false, true, false, true],
         [true, false, true, true, false],
         [false, false, true, false, true],
         [true, false, true, true, false]
     ];
-    board = GameOfLife1.advance(board);
+    board = game.advance(board);
     var table = this.render(board);
     assertEquals("cell failed", [' ',  ' ', '*', ' ', ' ' ], table[0]);
     assertEquals("cell failed", [' ',  ' ', '*', ' ', '*' ], table[1]);
     assertEquals("cell failed", [' ',  ' ', ' ', ' ', '*' ], table[2]);
     assertEquals("cell failed", [' ',  '*', '*', '*', ' ' ], table[3]);
 
-    board = GameOfLife1.advance(board);
+    board = game.advance(board);
     table = this.render(board);
     assertEquals("cell failed", [' ', ' ', ' ', '*', ' ' ], table[0]);
     assertEquals("cell failed", [' ', ' ', ' ', ' ', ' ' ], table[1]);
@@ -45,14 +46,14 @@ MyTestCase.prototype.testRev1_1 = function () {
 };
 
 MyTestCase.prototype.testRev1_2 = function () {
-    // Any live cell with fewer than two live neighbours dies, as if caused by under-population.
+    var game = createGameFI();
     var board = [
         [true,  false, false, true,  true],
         [true,  false, false, false, false],
         [false, false, false, false, false],
         [true,  false, false, false, true]
     ];
-    board = GameOfLife1.advance(board);
+    board = game.advance(board);
     table = this.render(board);
     assertEquals("cell failed", [' ', ' ', ' ', ' ', ' '], table[0]);
     assertEquals("cell failed", [' ', ' ', ' ', ' ', ' '], table[1]);
@@ -64,7 +65,7 @@ MyTestCase.prototype.testRev1_2 = function () {
 
 MyTestCase.prototype.testFPVersion_1 = function () {
 
-    var game = createGame();
+    var game = createGameFP();
     var board = [
         [true, false, true, false, true],
         [true, false, true, true, false],
@@ -88,7 +89,7 @@ MyTestCase.prototype.testFPVersion_1 = function () {
 
 MyTestCase.prototype.testFPVersion_2 = function () {
 
-    var game = createGame();
+    var game = createGameFP();
     var board = [
         [true,  false, false, true,  true],
         [true,  false, false, false, false],
