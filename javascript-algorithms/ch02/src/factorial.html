@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8">
+    <meta name="description" content="Canoo Engineering AG: Your first address for web front-end application development and language analysis">
+    <meta name="keywords" content="web applications,information retrieval,Rich Internet Applications,RIA,AJAX,java,Web security,ultra light client,web enabling,software development">
+    <title>Canoo - Delivering End-User Happiness - Game of Life Demo</title>
+    <link href="../../../resources/bootstrap/css/bootstrap.min.css" rel="stylesheet" media="screen">
+    <link href="../../../resources/canoo.css" rel="stylesheet">
+    <script type="text/javascript" src="factorial.js" ></script>
+    <script type="text/javascript" src="conwayOO.js" ></script>
+    <script type="text/javascript" src="conwayFP.js" ></script>
+    <script type="application/javascript">
+
+        var createRandomBoard = function (count) {
+            var rnd = function () {
+                return !!Math.floor(Math.random() * 2);
+            };
+            return Array.apply(null, new Array(count)).map(
+                    function() {
+                        return Array.apply(null, new Array(count)).map(rnd);
+                    }
+            );
+        };
+
+        var createRenderer = function(onColor, offColor, canvasId, advanceGame) {
+            var board = createRandomBoard(15);
+
+            return function() {
+                board = advanceGame(board);
+                var canvas = document.getElementById(canvasId);
+                if (canvas.getContext) {
+                    var rowCount = 0;
+                    var ctx = canvas.getContext("2d");
+                    board.forEach(function (row) {
+                        var columnCount = 0;
+                        rowCount += 1;
+                        row.forEach(function (column) {
+                            columnCount += 1;
+                            ctx.fillStyle = column ? onColor : offColor;
+                            ctx.fillRect((rowCount * 20), (columnCount * 20), 20, 20);
+                        });
+                    });
+                }
+
+            };
+        };
+
+        var render1, render2, render3;
+
+        var start1 = function() {
+            var game;
+            var gameV1 = function (board) {
+                if (!game) {
+                    game = createGameFI(board);
+                } else {
+                    game.advance();
+                }
+                return game.render();
+            };
+            render1 = createRenderer("rgb(200,0,0)", "rgb(0,0,0)", 'canvas1', gameV1);
+            render1();
+        };
+        var start2 = function() {
+            var game = createGameFP();
+            var gameV2 = function (board) { return game(board); };
+            render2 = createRenderer("rgb(0,100,0)", "rgb(0,0,0)", 'canvas2', gameV2);
+            render2();
+        };
+        var start3 = function() {
+            var game;
+            var gameV3 = function (board) {
+                if (!game) {
+                    game = new GameOfLife(board);
+                }
+                game.advance();
+                return game.render();
+            };
+            render3 = createRenderer("rgb(0,0,205)", "rgb(0,0,0)", 'canvas3', gameV3);
+            render3();
+        };
+
+    </script>
+</head>
+<body onload="start1(); start2(); start3();">
+
+<div id="header">
+    <div id="static-service-html">
+        <p class="util-links">
+            <a title="Follow Canoo on twitter" href="http://www.twitter.com/canoo" id="twitter">Twitter</a> |
+            <a title="Contact Canoo" href="http://www.canoo.com/service/contact">Contact</a> |
+            <a title="Canoo Website Imprint" href="http://www.canoo.com/service/imprint">Imprint</a>
+        </p>
+    </div>
+    <div id="static-header-html">
+        <div id="logo"><a title="Canoo, your provider for business web solutions" href="http://www.canoo.com">Canoo</a></div>
+    </div>
+</div>
+
+<h3><a href="http://en.wikipedia.org/wiki/Conway%27s_Game_of_Life">Conway's Game of Life</a> implemented 3 Different Ways</h3>
+<div style="float: left; border-left: 1px solid #eee;">
+    <div>
+        <canvas id="canvas1" width="350" height="350"></canvas>
+    </div>
+    <div style="padding-left: 10px; width:350px;">
+        Implemented using a Functional Inheritance pattern from JavaScript the good parts. <a href="https://github.com/canoo/team-javascript/blob/master/javascript-for-java-devs/game-of-life/src/conwayFI.js">Source</a>
+    </div>
+    <div style="padding-left: 10px;">
+        <input class="btn btn-small" type="button" name="Reset" value="Reset" onclick="start1();">
+        <input class="btn btn-small" type="button" name="Step" value="Step" onclick="render1();">
+        <input class="btn btn-small" type="button" name="Play" value="Play" onclick="interval1 = setInterval(function() {render1();}, 500); " >
+        <input class="btn btn-small" type="button" name="Stop" value="Stop" onclick="clearInterval(interval1); " >
+    </div>
+</div>
+<div style="float: left; border-left: 1px solid #eee;">
+    <div>
+        <canvas id="canvas2" width="350" height="350"></canvas>
+    </div>
+    <div style="padding-left: 10px; width:350px;">
+        Implemented using a Functional Programming style. <a href="https://github.com/canoo/team-javascript/blob/master/javascript-for-java-devs/game-of-life/src/conwayFP.js">Source</a>
+    </div>
+    <div style="padding-left: 10px;">
+        <input class="btn btn-small"type="button" name="Reset" value="Reset" onclick="start2();">
+        <input class="btn btn-small"type="button" name="Step" value="Step" onclick="render2();">
+        <input class="btn btn-small"type="button" name="Play" value="Play" onclick="interval2 = setInterval(function() {render2();}, 500); " >
+        <input class="btn btn-small"type="button" name="Stop" value="Stop" onclick="clearInterval(interval2); " >
+    </div>
+</div>
+<div style="float: left; border-left: 1px solid #eee;">
+    <div>
+        <canvas id="canvas3" width="350" height="350"></canvas>
+    </div>
+    <div style="padding-left: 10px; width:350px;">
+        Implemented using an Object Oriented style. <a href="https://github.com/canoo/team-javascript/blob/master/javascript-for-java-devs/game-of-life/src/conwayOO.js">Source</a>
+    </div>
+    <div style="padding-left: 10px;">
+        <input class="btn btn-small"type="button" name="Reset" value="Reset" onclick="start3();">
+        <input class="btn btn-small"type="button" name="Step" value="Step" onclick="render3();">
+        <input class="btn btn-small"type="button" name="Play" value="Play" onclick="interval3 = setInterval(function() {render3();}, 500); " >
+        <input class="btn btn-small"type="button" name="Stop" value="Stop" onclick="clearInterval(interval3); " >
+    </div>
+</div>
+</body>
+</html>
