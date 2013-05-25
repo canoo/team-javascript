@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8">
+    <meta name="description" content="Canoo Engineering AG: Your first address for web front-end application development and language analysis">
+    <meta name="keywords" content="web applications,information retrieval,Rich Internet Applications,RIA,AJAX,java,Web security,ultra light client,web enabling,software development">
+    <title>Canoo &ndash; Delivering End-User Happiness &ndash; JavaScript API Cheatsheet</title>
+    <link href="../../resources/bootstrap/css/bootstrap.min.css" rel="stylesheet" media="screen">
+    <link href="../../resources/canoo.css" rel="stylesheet">
+
+    <script type="text/javascript" src="apidata.js" ></script>
+    <script type="text/javascript">
+
+        function writeApi(javascriptApiData) {
+
+            function println(msg) {
+                document.write(msg);
+            }
+
+            function writeObject(object) {
+                var name = object.name,
+                    link = object.link; // array
+
+                println('<div style="border-left: 1px solid #eee;border-right: 1px solid #eee;">');
+                println('<h4><a name="' + name + '" href="' + link + '">' + name + '</a> <a href="#">&uarr;</a></h4>');
+                println('<table class="table table-bordered">');
+
+                object.api.forEach(function(element) {
+                    writeMethod(element);
+                });
+                println('</table>');
+                println('</div>');
+            }
+
+            function writeTOC(javascriptApiData) {
+                var names = javascriptApiData.map(function(e) {
+                    return "<a href=#" + encodeURIComponent(e.name) + ">" + e.name + "</a>";
+                });
+                println('<div style="text-align: center">');
+                println(names.join(" - "));
+                println("</div>");
+            }
+
+            function writeMethod(method) {
+
+                var anchor = '<a href=' + method.link + '>' + method.name + '</a>';
+
+                println('<tr>');
+                println('<td>');
+                println(anchor + method.parms + " &ndash; " + method.desc);
+                println('</td>');
+                println('</tr>');
+            }
+
+            writeTOC(javascriptApiData);
+            javascriptApiData.forEach(function(element){
+                writeObject(element);
+            });
+        }
+
+    </script>
+</head>
+<body>
+
+<div id="header">
+    <div id="static-service-html">
+        <p class="util-links">
+            <a title="Follow Canoo on twitter" href="http://www.twitter.com/canoo" id="twitter">Twitter</a> |
+            <a title="Contact Canoo" href="http://www.canoo.com/service/contact">Contact</a> |
+            <a title="Canoo Website Imprint" href="http://www.canoo.com/service/imprint">Imprint</a>
+        </p>
+    </div>
+    <div id="static-header-html">
+        <div id="logo"><a title="Canoo, your provider for business web solutions" href="http://www.canoo.com">Canoo</a></div>
+    </div>
+</div>
+
+<h3 style="text-align: center">JavaScript API Cheatsheet</h3>
+
+<div class="wrapper">
+    <script type="text/javascript">
+        writeApi(javascriptApiData);
+    </script>
+</div>
+
+</body>
+</html>
