@@ -13,48 +13,80 @@
 
         function writeApi(javascriptApiData) {
 
-            function println(msg) {
-                document.write(msg);
+            function createAnchor(link, text, name) {
+                var anchor = document.createElement('A');
+                anchor.setAttribute('href', link);
+                anchor.innerHTML = text;
+                if (name !== undefined) {
+                    anchor.setAttribute('name', name);
+                }
+                return anchor;
             }
 
-            function writeObject(object) {
+            function writeObject(object, contentNode) {
                 var name = object.name,
                     link = object.link; // array
 
-                println('<div style="border-left: 1px solid #eee;border-right: 1px solid #eee;">');
-                println('<h4><a name="' + name + '" href="' + link + '">' + name + '</a> <a href="#">&uarr;</a></h4>');
-                println('<table class="table table-bordered">');
+                var wrapper = document.createElement('DIV');
+                wrapper.style.borderLeft = '1px solid #eee';
+                wrapper.style.borderRight = '1px solid #eee';
+                contentNode.appendChild(wrapper);
+
+                var h4 = document.createElement('h4');
+                wrapper.appendChild(h4);
+
+                var anchor = createAnchor(link, name + ' ', name);
+                h4.appendChild(anchor);
+
+                var backArrow = createAnchor('#', '&uarr;');
+                h4.appendChild(backArrow);
+
+                var table = document.createElement('TABLE');
+                table.setAttribute('class', 'table table-bordered');
+                wrapper.appendChild(table);
+
+                var tbody = document.createElement('TBODY');
+                table.appendChild(tbody);
 
                 object.api.forEach(function(element) {
-                    writeMethod(element);
+                    writeMethod(element, tbody);
                 });
-                println('</table>');
-                println('</div>');
             }
 
-            function writeTOC(javascriptApiData) {
-                var names = javascriptApiData.map(function(e) {
-                    return "<a href=#" + encodeURIComponent(e.name) + ">" + e.name + "</a>";
+            function writeTOC(javascriptApiData, contentNode) {
+
+
+                var holder = document.createElement("DIV");
+                contentNode.appendChild(holder);
+                holder.style.textAlign = 'center';
+
+                javascriptApiData.forEach(function(e, index, array) {
+                    var anchor = createAnchor('#' + encodeURIComponent(e.name), e.name);
+                    holder.appendChild(anchor);
+                    if (index != array.length - 1) {
+                        holder.appendChild(document.createTextNode(' - '));
+                    }
                 });
-                println('<div style="text-align: center">');
-                println(names.join(" - "));
-                println("</div>");
             }
 
-            function writeMethod(method) {
+            function writeMethod(method, table) {
 
-                var anchor = '<a href=' + method.link + '>' + method.name + '</a>';
+                var tr = document.createElement('TR');
+                table.appendChild(tr);
 
-                println('<tr>');
-                println('<td>');
-                println(anchor + method.parms + " &ndash; " + method.desc);
-                println('</td>');
-                println('</tr>');
+                var td = document.createElement('TD');
+                tr.appendChild(td);
+
+                var anchor = createAnchor(method.link, method.name);
+                td.appendChild(anchor);
+
+                td.appendChild(document.createTextNode(method.parms + " - " + method.desc));
             }
 
-            writeTOC(javascriptApiData);
+            var contentNode = document.getElementById('content');
+            writeTOC(javascriptApiData, contentNode);
             javascriptApiData.forEach(function(element){
-                writeObject(element);
+                writeObject(element, contentNode);
             });
         }
 
@@ -77,7 +109,7 @@
 
 <h3 style="text-align: center">JavaScript API Cheatsheet</h3>
 
-<div class="wrapper">
+<div id="content">
     <script type="text/javascript">
         writeApi(javascriptApiData);
     </script>
