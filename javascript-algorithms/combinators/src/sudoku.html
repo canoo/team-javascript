@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8">
+    <meta name="description" content="Canoo Engineering AG: Your first address for web front-end application development and language analysis">
+    <meta name="keywords" content="web applications,information retrieval,Rich Internet Applications,RIA,AJAX,java,Web security,ultra light client,web enabling,software development">
+    <title>Canoo - Delivering End-User Happiness - Sudoku Solver</title>
+    <link href="../../../resources/bootstrap/css/bootstrap.min.css" rel="stylesheet" media="screen">
+    <link href="../../../resources/canoo.css" rel="stylesheet">
+    <script type="text/javascript" src="sudoku.js" ></script>
+
+    <style type="text/css">
+        input[type="text"] {
+            width: 10px;
+            margin: 0 0 0 0;
+        }
+        .top-border {
+            border-top:solid 2px
+        }
+        .left-border {
+            border-left:solid 2px
+        }
+
+    </style>
+
+    <script type="application/javascript">
+
+        function solve() {
+
+            function createMatrix() {
+                var x, y, matrix = [[], [], [], [], [], [], [], [], []];
+
+                for (y=0; y < 9; y++) {
+                    for (x=0; x < 9; x++) {
+                        matrix[y].push(Number(document.getElementById(x + ',' + y).value));
+                    }
+                }
+                return matrix;
+            }
+
+            var guessCallback = function(x, y, value) {
+                document.getElementById(x + ',' + y).value = value;
+            };
+
+            var backtrackCallback = function(x, y) {
+                document.getElementById(x + ',' + y).value = '';
+            };
+
+            var matrix = createMatrix();
+            var waitTime = document.getElementById("slow-mo").checked ? 20 : 0;
+            sudoku.solve(matrix, guessCallback, backtrackCallback, waitTime);
+        }
+
+        function fill(matrix) {
+            var x, y, row, cell;
+
+            for (y = 0; y < matrix.length; y++) {
+                row = matrix[y];
+                for (x = 0; x < row.length; x++) {
+                    cell = row[x];
+                    var id = x + ',' + y;
+                    var element = document.getElementById(id);
+                    if (cell) {
+                        element.value = cell;
+                    } else {
+                        element.value = '';
+                    }
+                }
+            }
+        }
+
+
+    </script>
+</head>
+<body onload="fill(sudoku.easy);">
+
+<div id="header">
+    <div id="static-service-html">
+        <p class="util-links">
+            <a title="Follow Canoo on twitter" href="http://www.twitter.com/canoo" id="twitter">Twitter</a> |
+            <a title="Contact Canoo" href="http://www.canoo.com/service/contact">Contact</a> |
+            <a title="Canoo Website Imprint" href="http://www.canoo.com/service/imprint">Imprint</a>
+        </p>
+    </div>
+    <div id="static-header-html">
+        <div id="logo"><a title="Canoo, your provider for business web solutions" href="http://www.canoo.com">Canoo</a></div>
+    </div>
+</div>
+
+<h3>Canoo's Sudoku Solver</h3>
+<div style="float: left; border-left: 1px solid #eee;">
+    <div style="padding-left: 10px;">
+        <input class="btn btn-small" type="button" name="Easy" value="Easy" onclick="fill(sudoku.easy);">
+        <input class="btn btn-small" type="button" name="Medium" value="Medium" onclick="fill(sudoku.medium);">
+        <input class="btn btn-small" type="button" name="Hard" value="Hard" onclick="fill(sudoku.hard);">
+        <input class="btn btn-small" type="button" name="Evil" value="Evil" onclick="fill(sudoku.evil);">
+    </div>
+    <div style="padding-left: 10px; padding-top: 10px;">
+        <table border="3">
+            <tr>
+                <td><input type="text" id="0,0"></td>
+                <td><input type="text" id="1,0"></td>
+                <td><input type="text" id="2,0"></td>
+                <td class="left-border"><input type="text" id="3,0"></td>
+                <td><input type="text" id="4,0"></td>
+                <td><input type="text" id="5,0"></td>
+                <td class="left-border"><input type="text" id="6,0"></td>
+                <td><input type="text" id="7,0"></td>
+                <td><input type="text" id="8,0"></td>
+            </tr>
+            <tr>
+                <td><input type="text" id="0,1"></td>
+                <td><input type="text" id="1,1"></td>
+                <td><input type="text" id="2,1"></td>
+                <td class="left-border"><input type="text" id="3,1"></td>
+                <td><input type="text" id="4,1"></td>
+                <td><input type="text" id="5,1"></td>
+                <td class="left-border"><input type="text" id="6,1"></td>
+                <td><input type="text" id="7,1"></td>
+                <td><input type="text" id="8,1"></td>
+            </tr>
+            <tr>
+                <td><input type="text" id="0,2"></td>
+                <td><input type="text" id="1,2"></td>
+                <td><input type="text" id="2,2"></td>
+                <td class="left-border"><input type="text" id="3,2"></td>
+                <td><input type="text" id="4,2"></td>
+                <td><input type="text" id="5,2"></td>
+                <td class="left-border"><input type="text" id="6,2"></td>
+                <td><input type="text" id="7,2"></td>
+                <td><input type="text" id="8,2"></td>
+            </tr>
+            <tr>
+                <td class="top-border"><input type="text" id="0,3"></td>
+                <td class="top-border"><input type="text" id="1,3"></td>
+                <td class="top-border"><input type="text" id="2,3"></td>
+                <td class="top-border left-border"><input type="text" id="3,3"></td>
+                <td class="top-border"><input type="text" id="4,3"></td>
+                <td class="top-border"><input type="text" id="5,3"></td>
+                <td class="top-border left-border"><input type="text" id="6,3"></td>
+                <td class="top-border"><input type="text" id="7,3"></td>
+                <td class="top-border"><input type="text" id="8,3"></td>
+            </tr>
+            <tr>
+                <td><input type="text" id="0,4"></td>
+                <td><input type="text" id="1,4"></td>
+                <td><input type="text" id="2,4"></td>
+                <td class="left-border"><input type="text" id="3,4"></td>
+                <td><input type="text" id="4,4"></td>
+                <td><input type="text" id="5,4"></td>
+                <td class="left-border"><input type="text" id="6,4"></td>
+                <td><input type="text" id="7,4"></td>
+                <td><input type="text" id="8,4"></td>
+            </tr>
+            <tr>
+                <td><input type="text" id="0,5"></td>
+                <td><input type="text" id="1,5"></td>
+                <td><input type="text" id="2,5"></td>
+                <td class="left-border"><input type="text" id="3,5"></td>
+                <td><input type="text" id="4,5"></td>
+                <td><input type="text" id="5,5"></td>
+                <td class="left-border"><input type="text" id="6,5"></td>
+                <td><input type="text" id="7,5"></td>
+                <td><input type="text" id="8,5"></td>
+            </tr>
+            <tr>
+                <td class="top-border"><input type="text" id="0,6"></td>
+                <td class="top-border"><input type="text" id="1,6"></td>
+                <td class="top-border"><input type="text" id="2,6"></td>
+                <td class="top-border left-border"><input type="text" id="3,6"></td>
+                <td class="top-border"><input type="text" id="4,6"></td>
+                <td class="top-border"><input type="text" id="5,6"></td>
+                <td class="top-border left-border"><input type="text" id="6,6"></td>
+                <td class="top-border"><input type="text" id="7,6"></td>
+                <td class="top-border"><input type="text" id="8,6"></td>
+            </tr>
+            <tr>
+                <td><input type="text" id="0,7"></td>
+                <td><input type="text" id="1,7"></td>
+                <td><input type="text" id="2,7"></td>
+                <td class="left-border"><input type="text" id="3,7"></td>
+                <td><input type="text" id="4,7"></td>
+                <td><input type="text" id="5,7"></td>
+                <td class="left-border"><input type="text" id="6,7"></td>
+                <td><input type="text" id="7,7"></td>
+                <td><input type="text" id="8,7"></td>
+            </tr>
+            <tr>
+                <td><input type="text" id="0,8"></td>
+                <td><input type="text" id="1,8"></td>
+                <td><input type="text" id="2,8"></td>
+                <td class="left-border"><input type="text" id="3,8"></td>
+                <td><input type="text" id="4,8"></td>
+                <td><input type="text" id="5,8"></td>
+                <td class="left-border"><input type="text" id="6,8"></td>
+                <td><input type="text" id="7,8"></td>
+                <td><input type="text" id="8,8"></td>
+            </tr>
+        </table>
+    </div>
+
+    <div style="padding-left: 10px; padding-top: 10px; ">
+        <div class="controls">
+            <label style="float:right; margin-bottom: 0; padding-top: 0;" class="checkbox">
+                <input type="checkbox" id="slow-mo" name="slow-mo">Slow-Motion
+            </label>
+            <input class="btn btn-small" type="button" name="Solve" value="Solve" onclick="solve();">
+        </div>
+    </div>
+
+</div>
+
+
+</body>
+</html>
